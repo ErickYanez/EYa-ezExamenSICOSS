@@ -1,0 +1,94 @@
+﻿@model ML.Calculadora
+@{
+    ViewData["Title"] = "Historial";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2>Super digito</h2>
+    <hr />
+    @using (Html.BeginForm("SuperDigito", "Calculadora", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="container mt-5">
+            <div class="row">
+                @foreach (ML.Calculadora calculadora in Model.Calculadoras)
+                {
+                    <input id="IdUsuario" name="IdUsuario" type="hidden" value="@calculadora.Usuario.IdUsuario">                  
+                }
+                <h5>Realizar calculo</h5>
+                <div class="col">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Numero)
+                        @Html.TextBoxFor(model => model.Numero, new { @class = "form-control", @placeholder = "Numero", @name="Numero", @value="@ViewBag.Numero" })
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Resultado)
+                        @Html.TextBoxFor(model => model.Resultado, new { @class = "form-control", @placeholder = "Resultado", @value="@ViewBag.Resultado" })
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="container">
+                        <div class="row justify-content-md-center">
+                            <div class="col col-lg-2">
+                                <input type="submit" value="Calcular" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="d-flex justify-content-around">
+    <div class="row mt-5">
+        <H3>Historial</H3>
+        <table class="table table-striped">
+            <thead class="table-success">
+                <tr>
+                    <th style="display :none;">
+                        IdCalculadora
+                    </th>
+                    <th class="text-center">
+                        Numero
+                    </th>
+                    <th class="text-center">
+                        Resultado
+                    </th>
+                    <th class="text-center">
+                        FechaHora
+                    </th>
+                    <th class="text-center">
+                        Eliminar
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody class="table-light">
+                @foreach (ML.Calculadora calculadora in Model.Calculadoras)
+                {
+                    <tr>
+                        <td style="display :none;">
+                            @calculadora.IdCalculadora
+                        </td>
+                        <td class="text-center">
+                            @calculadora.Numero
+                        </td>
+                        <td class="text-center">
+                            @calculadora.Resultado
+                        </td>
+                        <td class="text-center">
+                            @calculadora.FechaHora
+                        </td>
+                        <td class="text-center">
+                            <a class="btn btn-danger bi-trash" href="@Url.Action("Delete", "Calculadora", new { IdUsuario = calculadora.Usuario.IdUsuario, IdCalculadora = calculadora.IdCalculadora})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

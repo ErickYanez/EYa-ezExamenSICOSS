@@ -1,0 +1,111 @@
+﻿@model ML.Usuario
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            @using (Html.BeginForm("Form", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <h3 class="text-center">Registro de usuario</h3>
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.HiddenFor(model => model.IdUsuario)
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="row">                         
+                            <div class="col">                              
+
+                            </div>
+
+                            <div class="col">
+
+                                <div class="col">
+                                    @Html.LabelFor(model => model.UserName)
+                                    <div class="input-group">
+
+                                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", @id="nombre", @onkeypress = "return SoloLetras(event, 'lblNombre')"})
+
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.UserName)
+                                    @Html.Label("", null, new {@id = "lblNombre"})
+                                </div>
+
+                                <div class="col">
+                                    @Html.LabelFor(model => model.Password)
+                                    <div class="input-group">
+
+                                        <span class="input-group-text"><i class="bi bi-key"></i></span>
+                                        @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @id="inputTXT_Password" })
+
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Password)
+                                    @Html.Label("", null, new {@id = "alert_Password"})
+                                </div>
+
+                                <div class="col">
+                                    @Html.LabelFor(model => model.Password, "Confirmar Password")
+                                    <div class="input-group">
+
+                                        <span class="input-group-text"><i class="bi bi-key"></i></span>
+                                        @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @id="inputTXT_PasswordConfirm" })
+
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Password)
+                                    @Html.Label("", null, new {@id = "alert_PasswordConfirm"})
+                                </div>
+                            </div>
+
+                            <div class="col">                               
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-md-center mt-4">
+                        <div class="col col-lg-2">
+                            <input type="submit" value="Guardar" class="btn btn-success" />
+
+                            @Html.ActionLink("Regresar", "Login", "Usuario", htmlAttributes: new { @class = "btn btn-danger" })
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+        <script type="text/javascript">            
+            $('#inputTXT_Password, #inputTXT_PasswordConfirm').on('blur keyup', function () {
+                var regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+                var value1 = $('#inputTXT_PasswordConfirm').val();
+                if (regex.test(this.value) && $('#inputTXT_Password').val() == $('#inputTXT_PasswordConfirm').val()) {
+                    $('#alert_Password').html('');
+                    $('#alert_PasswordConfirm').html('Los password coinciden').attr('class', 'text-success');
+                }
+                else if (regex.test(this.value)) {
+                    $('#alert_Password').html('');
+                    $('#alert_PasswordConfirm').html('Los password no coinciden').attr('class', 'text-danger');
+                }
+                else if (regex.test($('#inputTXT_Password').val()) && !regex.test(value1)) {
+                    $('#alert_Password').html('');
+                    $('#alert_PasswordConfirm').html('El password es inválido, debe de contener 8 caracteres, al menos una letra M, una letra m y un numero').attr('class', 'text-danger');
+                }
+                else {
+                    $('#alert_Password').html('El password es inválido, debe de contener 8 caracteres, al menos una letra M, una letra m y un numero');
+                    $('#alert_PasswordConfirm').html('Los password no coinciden').attr('class', 'text-danger');
+                }
+            });
+        </script>
+}
